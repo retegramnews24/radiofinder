@@ -92,6 +92,30 @@
             transform: none;
         }
 
+        .favorite-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #333;
+            color: #ff2a6d;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .favorite-btn:hover {
+            background: #444;
+        }
+
+        .favorite-btn.active {
+            background: #ff2a6d;
+            color: white;
+        }
+
         .volume-container {
             display: flex;
             align-items: center;
@@ -181,6 +205,9 @@
             border-bottom: 1px solid #333;
             cursor: pointer;
             transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .station-item:hover {
@@ -191,6 +218,10 @@
             border-bottom: none;
         }
 
+        .station-item-info {
+            flex: 1;
+        }
+
         .station-item-name {
             font-weight: 500;
             margin-bottom: 4px;
@@ -199,6 +230,22 @@
         .station-item-details {
             font-size: 0.8em;
             color: #888;
+        }
+
+        .station-item-favorite {
+            color: #ff2a6d;
+            font-size: 1.2em;
+            margin-left: 10px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .station-item:hover .station-item-favorite {
+            opacity: 1;
+        }
+
+        .station-item-favorite.active {
+            opacity: 1;
         }
 
         .load-more-btn {
@@ -232,6 +279,268 @@
             flex-shrink: 0;
         }
 
+        .favorites-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+
+        .favorites-btn {
+            flex: 1;
+            padding: 10px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .favorites-btn:hover {
+            background: #444;
+        }
+
+        .favorites-btn.active {
+            background: #ff2a6d;
+        }
+
+        .visualizer-container {
+            height: 80px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            background: #0a0a0a;
+            overflow: hidden;
+            display: none;
+            flex-shrink: 0;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .visualizer {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .visualizer-bar {
+            width: 8px;
+            background: linear-gradient(to top, #ff2a6d, #ff8e53);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.1s ease;
+        }
+
+        .visualizer-circle {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff2a6d;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-wave {
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(90deg, transparent, #ff2a6d, transparent);
+            opacity: 0.7;
+            position: absolute;
+            bottom: 0;
+            transform-origin: center bottom;
+        }
+
+        .visualizer-particle {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ff2a6d;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .visualizer-spectrum {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, #ff2a6d, #ff8e53, #ffd166);
+            position: absolute;
+            bottom: 0;
+            transform-origin: bottom;
+            transition: height 0.2s ease;
+        }
+
+        .visualizer-line {
+            width: 100%;
+            height: 2px;
+            background: #ff2a6d;
+            position: absolute;
+            left: 0;
+            transition: transform 0.1s ease;
+        }
+
+        .visualizer-square {
+            width: 15px;
+            height: 15px;
+            background: #ff2a6d;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-triangle {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 14px solid #ff2a6d;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #ff2a6d;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-ring {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ff2a6d;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-spiral {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff2a6d;
+            position: absolute;
+            transition: all 0.2s ease;
+        }
+
+        .visualizer-arc {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top: 2px solid #ff2a6d;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-hexagon {
+            width: 16px;
+            height: 14px;
+            background: #ff2a6d;
+            position: absolute;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-diamond {
+            width: 12px;
+            height: 12px;
+            background: #ff2a6d;
+            position: absolute;
+            transform: rotate(45deg);
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-star {
+            width: 16px;
+            height: 16px;
+            background: #ff2a6d;
+            position: absolute;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-pulse {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff2a6d;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-grid {
+            width: 10px;
+            height: 10px;
+            background: #ff2a6d;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-radial {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .visualizer-radial-line {
+            width: 2px;
+            height: 20px;
+            background: #ff2a6d;
+            position: absolute;
+            transform-origin: bottom center;
+            transition: height 0.1s ease;
+        }
+
+        .visualizer-matrix {
+            width: 8px;
+            height: 8px;
+            background: #ff2a6d;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-vortex {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff2a6d;
+            position: absolute;
+            transition: all 0.2s ease;
+        }
+
+        .visualizer-ripple {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1px solid #ff2a6d;
+            position: absolute;
+            transition: all 0.2s ease;
+        }
+
+        .visualizer-firework {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #ff2a6d;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+
+        .visualizer-nebula {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: radial-gradient(circle, transparent 10%, #0a0a0a 70%);
+        }
+
         .station-list::-webkit-scrollbar {
             width: 6px;
         }
@@ -255,11 +564,21 @@
         
         <div class="controls">
             <button class="control-btn" id="playPause" disabled>▶</button>
+            <button class="favorite-btn" id="favoriteBtn">♥</button>
         </div>
 
         <div class="volume-container">
             <span>🔊</span>
             <input type="range" class="volume-slider" id="volume" min="0" max="1" step="0.1" value="0.5">
+        </div>
+
+        <div class="visualizer-container" id="visualizerContainer">
+            <div class="visualizer" id="visualizer"></div>
+        </div>
+
+        <div class="favorites-controls">
+            <button class="favorites-btn" id="showAllBtn">Tutte le stazioni</button>
+            <button class="favorites-btn" id="showFavoritesBtn">Preferiti</button>
         </div>
 
         <div class="counter">
@@ -282,12 +601,12 @@
     <script>
         // Configurazione
         const TARGET_STATIONS = 10000;
-        const BATCH_SIZE = 200; // Aumentato per caricare più stazioni
-        const MAX_REQUESTS = TARGET_STATIONS / BATCH_SIZE;
+        const BATCH_SIZE = 200;
 
         // Elementi DOM
         const audio = new Audio();
         const playPauseBtn = document.getElementById('playPause');
+        const favoriteBtn = document.getElementById('favoriteBtn');
         const volumeSlider = document.getElementById('volume');
         const searchInput = document.getElementById('searchInput');
         const stationList = document.getElementById('stationList');
@@ -297,6 +616,10 @@
         const statusEl = document.getElementById('status');
         const stationCountEl = document.getElementById('stationCount');
         const progressBar = document.getElementById('progressBar');
+        const showAllBtn = document.getElementById('showAllBtn');
+        const showFavoritesBtn = document.getElementById('showFavoritesBtn');
+        const visualizerContainer = document.getElementById('visualizerContainer');
+        const visualizer = document.getElementById('visualizer');
 
         // Variabili globali
         let currentStation = null;
@@ -306,6 +629,542 @@
         let currentOffset = 0;
         let isLoading = false;
         let currentSearchQuery = '';
+        let favorites = JSON.parse(localStorage.getItem('radioFavorites')) || [];
+        let showingFavorites = false;
+        let visualizerAnimationId = null;
+        let currentVisualizerType = 0;
+        const visualizerTypes = 25;
+
+        // Inizializza il visualizzatore
+        function initVisualizer() {
+            // Rimuovi elementi esistenti
+            visualizer.innerHTML = '';
+            
+            if (currentVisualizerType === 0) {
+                // Visualizzatore a barre
+                for (let i = 0; i < 32; i++) {
+                    const bar = document.createElement('div');
+                    bar.className = 'visualizer-bar';
+                    bar.style.height = '5px';
+                    visualizer.appendChild(bar);
+                }
+            } else if (currentVisualizerType === 1) {
+                // Visualizzatore a cerchi
+                for (let i = 0; i < 24; i++) {
+                    const circle = document.createElement('div');
+                    circle.className = 'visualizer-circle';
+                    const angle = (i / 24) * Math.PI * 2;
+                    const radius = 30;
+                    const x = 50 + radius * Math.cos(angle);
+                    const y = 50 + radius * Math.sin(angle);
+                    circle.style.left = `${x}%`;
+                    circle.style.top = `${y}%`;
+                    visualizer.appendChild(circle);
+                }
+            } else if (currentVisualizerType === 2) {
+                // Visualizzatore a onde
+                for (let i = 0; i < 3; i++) {
+                    const wave = document.createElement('div');
+                    wave.className = 'visualizer-wave';
+                    wave.style.height = `${20 + i * 15}%`;
+                    wave.style.background = `linear-gradient(90deg, transparent, ${i === 0 ? '#ff2a6d' : i === 1 ? '#ff8e53' : '#ffd166'}, transparent)`;
+                    visualizer.appendChild(wave);
+                }
+            } else if (currentVisualizerType === 3) {
+                // Visualizzatore a particelle
+                for (let i = 0; i < 40; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'visualizer-particle';
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.bottom = `${Math.random() * 100}%`;
+                    particle.style.background = `hsl(${Math.random() * 60 + 330}, 100%, 65%)`;
+                    visualizer.appendChild(particle);
+                }
+            } else if (currentVisualizerType === 4) {
+                // Visualizzatore spectrum
+                const spectrum = document.createElement('div');
+                spectrum.className = 'visualizer-spectrum';
+                spectrum.style.height = '10%';
+                visualizer.appendChild(spectrum);
+            } else if (currentVisualizerType === 5) {
+                // Linee orizzontali
+                for (let i = 0; i < 12; i++) {
+                    const line = document.createElement('div');
+                    line.className = 'visualizer-line';
+                    line.style.top = `${(i / 12) * 100}%`;
+                    line.style.transform = `scaleX(0.1)`;
+                    visualizer.appendChild(line);
+                }
+            } else if (currentVisualizerType === 6) {
+                // Quadrati
+                for (let i = 0; i < 20; i++) {
+                    const square = document.createElement('div');
+                    square.className = 'visualizer-square';
+                    square.style.left = `${Math.random() * 100}%`;
+                    square.style.top = `${Math.random() * 100}%`;
+                    square.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    visualizer.appendChild(square);
+                }
+            } else if (currentVisualizerType === 7) {
+                // Triangoli
+                for (let i = 0; i < 15; i++) {
+                    const triangle = document.createElement('div');
+                    triangle.className = 'visualizer-triangle';
+                    triangle.style.left = `${Math.random() * 100}%`;
+                    triangle.style.top = `${Math.random() * 100}%`;
+                    triangle.style.borderBottomColor = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    visualizer.appendChild(triangle);
+                }
+            } else if (currentVisualizerType === 8) {
+                // Punti casuali
+                for (let i = 0; i < 60; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'visualizer-dot';
+                    dot.style.left = `${Math.random() * 100}%`;
+                    dot.style.top = `${Math.random() * 100}%`;
+                    dot.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    visualizer.appendChild(dot);
+                }
+            } else if (currentVisualizerType === 9) {
+                // Anelli
+                for (let i = 0; i < 12; i++) {
+                    const ring = document.createElement('div');
+                    ring.className = 'visualizer-ring';
+                    ring.style.left = `${Math.random() * 100}%`;
+                    ring.style.top = `${Math.random() * 100}%`;
+                    ring.style.borderColor = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    visualizer.appendChild(ring);
+                }
+            } else if (currentVisualizerType === 10) {
+                // Spirale
+                for (let i = 0; i < 30; i++) {
+                    const spiral = document.createElement('div');
+                    spiral.className = 'visualizer-spiral';
+                    spiral.style.left = '50%';
+                    spiral.style.top = '50%';
+                    spiral.style.background = `hsl(${i * 12}, 100%, 65%)`;
+                    visualizer.appendChild(spiral);
+                }
+            } else if (currentVisualizerType === 11) {
+                // Archi
+                for (let i = 0; i < 18; i++) {
+                    const arc = document.createElement('div');
+                    arc.className = 'visualizer-arc';
+                    arc.style.left = `${Math.random() * 100}%`;
+                    arc.style.top = `${Math.random() * 100}%`;
+                    arc.style.borderTopColor = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    visualizer.appendChild(arc);
+                }
+            } else if (currentVisualizerType === 12) {
+                // Esagoni
+                for (let i = 0; i < 15; i++) {
+                    const hexagon = document.createElement('div');
+                    hexagon.className = 'visualizer-hexagon';
+                    hexagon.style.left = `${Math.random() * 100}%`;
+                    hexagon.style.top = `${Math.random() * 100}%`;
+                    hexagon.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    visualizer.appendChild(hexagon);
+                }
+            } else if (currentVisualizerType === 13) {
+                // Diamanti
+                for (let i = 0; i < 20; i++) {
+                    const diamond = document.createElement('div');
+                    diamond.className = 'visualizer-diamond';
+                    diamond.style.left = `${Math.random() * 100}%`;
+                    diamond.style.top = `${Math.random() * 100}%`;
+                    diamond.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    visualizer.appendChild(diamond);
+                }
+            } else if (currentVisualizerType === 14) {
+                // Stelle
+                for (let i = 0; i < 10; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'visualizer-star';
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    star.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    visualizer.appendChild(star);
+                }
+            } else if (currentVisualizerType === 15) {
+                // Pulsazioni
+                for (let i = 0; i < 25; i++) {
+                    const pulse = document.createElement('div');
+                    pulse.className = 'visualizer-pulse';
+                    pulse.style.left = `${Math.random() * 100}%`;
+                    pulse.style.top = `${Math.random() * 100}%`;
+                    pulse.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    visualizer.appendChild(pulse);
+                }
+            } else if (currentVisualizerType === 16) {
+                // Griglia
+                for (let i = 0; i < 8; i++) {
+                    for (let j = 0; j < 6; j++) {
+                        const grid = document.createElement('div');
+                        grid.className = 'visualizer-grid';
+                        grid.style.left = `${(i / 8) * 100}%`;
+                        grid.style.top = `${(j / 6) * 100}%`;
+                        grid.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                        visualizer.appendChild(grid);
+                    }
+                }
+            } else if (currentVisualizerType === 17) {
+                // Radiale
+                const radial = document.createElement('div');
+                radial.className = 'visualizer-radial';
+                for (let i = 0; i < 24; i++) {
+                    const line = document.createElement('div');
+                    line.className = 'visualizer-radial-line';
+                    line.style.transform = `rotate(${i * 15}deg)`;
+                    line.style.height = '10px';
+                    radial.appendChild(line);
+                }
+                visualizer.appendChild(radial);
+            } else if (currentVisualizerType === 18) {
+                // Matrice
+                for (let i = 0; i < 10; i++) {
+                    for (let j = 0; j < 8; j++) {
+                        const matrix = document.createElement('div');
+                        matrix.className = 'visualizer-matrix';
+                        matrix.style.left = `${(i / 10) * 100}%`;
+                        matrix.style.top = `${(j / 8) * 100}%`;
+                        matrix.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                        visualizer.appendChild(matrix);
+                    }
+                }
+            } else if (currentVisualizerType === 19) {
+                // Vortice
+                for (let i = 0; i < 40; i++) {
+                    const vortex = document.createElement('div');
+                    vortex.className = 'visualizer-vortex';
+                    vortex.style.left = '50%';
+                    vortex.style.top = '50%';
+                    vortex.style.background = `hsl(${i * 9}, 100%, 65%)`;
+                    visualizer.appendChild(vortex);
+                }
+            } else if (currentVisualizerType === 20) {
+                // Onde circolari
+                for (let i = 0; i < 8; i++) {
+                    const ripple = document.createElement('div');
+                    ripple.className = 'visualizer-ripple';
+                    ripple.style.left = '50%';
+                    ripple.style.top = '50%';
+                    ripple.style.borderColor = `hsl(${i * 45}, 100%, 65%)`;
+                    visualizer.appendChild(ripple);
+                }
+            } else if (currentVisualizerType === 21) {
+                // Fuochi d'artificio
+                for (let i = 0; i < 50; i++) {
+                    const firework = document.createElement('div');
+                    firework.className = 'visualizer-firework';
+                    firework.style.left = `${Math.random() * 100}%`;
+                    firework.style.top = `${Math.random() * 100}%`;
+                    firework.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    visualizer.appendChild(firework);
+                }
+            } else if (currentVisualizerType === 22) {
+                // Nebulosa
+                const nebula = document.createElement('div');
+                nebula.className = 'visualizer-nebula';
+                visualizer.appendChild(nebula);
+                for (let i = 0; i < 30; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'visualizer-dot';
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    star.style.background = `hsl(${Math.random() * 60 + 300}, 100%, 65%)`;
+                    star.style.width = `${2 + Math.random() * 4}px`;
+                    star.style.height = star.style.width;
+                    visualizer.appendChild(star);
+                }
+            } else if (currentVisualizerType === 23) {
+                // Scia
+                for (let i = 0; i < 25; i++) {
+                    const trail = document.createElement('div');
+                    trail.className = 'visualizer-dot';
+                    trail.style.left = `${Math.random() * 100}%`;
+                    trail.style.top = `${Math.random() * 100}%`;
+                    trail.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    trail.style.width = `${3 + Math.random() * 5}px`;
+                    trail.style.height = trail.style.width;
+                    visualizer.appendChild(trail);
+                }
+            } else if (currentVisualizerType === 24) {
+                // Cascata
+                for (let i = 0; i < 20; i++) {
+                    const waterfall = document.createElement('div');
+                    waterfall.className = 'visualizer-bar';
+                    waterfall.style.width = '15px';
+                    waterfall.style.height = '5px';
+                    waterfall.style.background = `hsl(${Math.random() * 60 + 200}, 100%, 65%)`;
+                    visualizer.appendChild(waterfall);
+                }
+            }
+        }
+
+        // Avvia l'animazione del visualizzatore
+        function startVisualizer() {
+            if (visualizerAnimationId) {
+                cancelAnimationFrame(visualizerAnimationId);
+            }
+            
+            function animate() {
+                if (!isPlaying) {
+                    visualizerContainer.style.display = 'none';
+                    return;
+                }
+                
+                if (currentVisualizerType === 0) {
+                    // Animazione barre
+                    const bars = visualizer.querySelectorAll('.visualizer-bar');
+                    bars.forEach(bar => {
+                        const height = 5 + Math.random() * 70;
+                        bar.style.height = `${height}px`;
+                    });
+                } else if (currentVisualizerType === 1) {
+                    // Animazione cerchi
+                    const circles = visualizer.querySelectorAll('.visualizer-circle');
+                    circles.forEach(circle => {
+                        const scale = 0.5 + Math.random() * 1.5;
+                        circle.style.transform = `scale(${scale})`;
+                        circle.style.opacity = 0.5 + Math.random() * 0.5;
+                    });
+                } else if (currentVisualizerType === 2) {
+                    // Animazione onde
+                    const waves = visualizer.querySelectorAll('.visualizer-wave');
+                    const time = Date.now() / 1000;
+                    waves.forEach((wave, i) => {
+                        const speed = 0.5 + i * 0.2;
+                        const offset = Math.sin(time * speed) * 20;
+                        wave.style.transform = `translateX(${offset}px)`;
+                    });
+                } else if (currentVisualizerType === 3) {
+                    // Animazione particelle
+                    const particles = visualizer.querySelectorAll('.visualizer-particle');
+                    particles.forEach(particle => {
+                        let bottom = parseFloat(particle.style.bottom) || 0;
+                        bottom += Math.random() * 3;
+                        
+                        if (bottom > 100) {
+                            bottom = 0;
+                            particle.style.left = `${Math.random() * 100}%`;
+                        }
+                        
+                        particle.style.bottom = `${bottom}%`;
+                        particle.style.opacity = 0.3 + (bottom / 100) * 0.7;
+                    });
+                } else if (currentVisualizerType === 4) {
+                    // Animazione spectrum
+                    const spectrum = visualizer.querySelector('.visualizer-spectrum');
+                    const height = 10 + Math.random() * 80;
+                    spectrum.style.height = `${height}%`;
+                } else if (currentVisualizerType === 5) {
+                    // Linee orizzontali
+                    const lines = visualizer.querySelectorAll('.visualizer-line');
+                    lines.forEach(line => {
+                        const scale = 0.1 + Math.random() * 0.9;
+                        line.style.transform = `scaleX(${scale})`;
+                    });
+                } else if (currentVisualizerType === 6) {
+                    // Quadrati
+                    const squares = visualizer.querySelectorAll('.visualizer-square');
+                    squares.forEach(square => {
+                        const scale = 0.5 + Math.random() * 1.5;
+                        square.style.transform = `scale(${scale})`;
+                        square.style.opacity = 0.3 + Math.random() * 0.7;
+                    });
+                } else if (currentVisualizerType === 7) {
+                    // Triangoli
+                    const triangles = visualizer.querySelectorAll('.visualizer-triangle');
+                    triangles.forEach(triangle => {
+                        const rotate = Math.random() * 360;
+                        triangle.style.transform = `rotate(${rotate}deg)`;
+                        triangle.style.opacity = 0.3 + Math.random() * 0.7;
+                    });
+                } else if (currentVisualizerType === 8) {
+                    // Punti casuali
+                    const dots = visualizer.querySelectorAll('.visualizer-dot');
+                    dots.forEach(dot => {
+                        const opacity = 0.1 + Math.random() * 0.9;
+                        dot.style.opacity = opacity;
+                    });
+                } else if (currentVisualizerType === 9) {
+                    // Anelli
+                    const rings = visualizer.querySelectorAll('.visualizer-ring');
+                    rings.forEach(ring => {
+                        const scale = 0.5 + Math.random() * 1.5;
+                        ring.style.transform = `scale(${scale})`;
+                        ring.style.opacity = 0.3 + Math.random() * 0.7;
+                    });
+                } else if (currentVisualizerType === 10) {
+                    // Spirale
+                    const spirals = visualizer.querySelectorAll('.visualizer-spiral');
+                    const time = Date.now() / 1000;
+                    spirals.forEach((spiral, i) => {
+                        const angle = time * 2 + i * 0.2;
+                        const distance = 10 + i * 2;
+                        const x = 50 + Math.cos(angle) * distance;
+                        const y = 50 + Math.sin(angle) * distance;
+                        spiral.style.left = `${x}%`;
+                        spiral.style.top = `${y}%`;
+                    });
+                } else if (currentVisualizerType === 11) {
+                    // Archi
+                    const arcs = visualizer.querySelectorAll('.visualizer-arc');
+                    arcs.forEach(arc => {
+                        const rotate = Math.random() * 360;
+                        arc.style.transform = `rotate(${rotate}deg)`;
+                        arc.style.opacity = 0.3 + Math.random() * 0.7;
+                    });
+                } else if (currentVisualizerType === 12) {
+                    // Esagoni
+                    const hexagons = visualizer.querySelectorAll('.visualizer-hexagon');
+                    hexagons.forEach(hexagon => {
+                        const rotate = Math.random() * 360;
+                        hexagon.style.transform = `rotate(${rotate}deg)`;
+                        hexagon.style.opacity = 0.3 + Math.random() * 0.7;
+                    });
+                } else if (currentVisualizerType === 13) {
+                    // Diamanti
+                    const diamonds = visualizer.querySelectorAll('.visualizer-diamond');
+                    diamonds.forEach(diamond => {
+                        const scale = 0.5 + Math.random() * 1.5;
+                        diamond.style.transform = `rotate(45deg) scale(${scale})`;
+                        diamond.style.opacity = 0.3 + Math.random() * 0.7;
+                    });
+                } else if (currentVisualizerType === 14) {
+                    // Stelle
+                    const stars = visualizer.querySelectorAll('.visualizer-star');
+                    stars.forEach(star => {
+                        const scale = 0.5 + Math.random() * 1.5;
+                        star.style.transform = `scale(${scale})`;
+                        star.style.opacity = 0.3 + Math.random() * 0.7;
+                    });
+                } else if (currentVisualizerType === 15) {
+                    // Pulsazioni
+                    const pulses = visualizer.querySelectorAll('.visualizer-pulse');
+                    const time = Date.now() / 500;
+                    pulses.forEach((pulse, i) => {
+                        const scale = 0.5 + Math.sin(time + i * 0.5) * 0.5;
+                        pulse.style.transform = `scale(${scale})`;
+                        pulse.style.opacity = 0.3 + scale * 0.7;
+                    });
+                } else if (currentVisualizerType === 16) {
+                    // Griglia
+                    const grids = visualizer.querySelectorAll('.visualizer-grid');
+                    grids.forEach(grid => {
+                        const scale = 0.5 + Math.random() * 1.5;
+                        grid.style.transform = `scale(${scale})`;
+                        grid.style.opacity = 0.3 + Math.random() * 0.7;
+                    });
+                } else if (currentVisualizerType === 17) {
+                    // Radiale
+                    const lines = visualizer.querySelectorAll('.visualizer-radial-line');
+                    lines.forEach((line, i) => {
+                        const height = 10 + Math.random() * 40;
+                        line.style.height = `${height}px`;
+                    });
+                } else if (currentVisualizerType === 18) {
+                    // Matrice
+                    const matrices = visualizer.querySelectorAll('.visualizer-matrix');
+                    matrices.forEach(matrix => {
+                        const scale = 0.5 + Math.random() * 1.5;
+                        matrix.style.transform = `scale(${scale})`;
+                        matrix.style.opacity = 0.3 + Math.random() * 0.7;
+                    });
+                } else if (currentVisualizerType === 19) {
+                    // Vortice
+                    const vortices = visualizer.querySelectorAll('.visualizer-vortex');
+                    const time = Date.now() / 1000;
+                    vortices.forEach((vortex, i) => {
+                        const angle = time * 3 + i * 0.3;
+                        const distance = 5 + i * 1.5;
+                        const x = 50 + Math.cos(angle) * distance;
+                        const y = 50 + Math.sin(angle) * distance;
+                        vortex.style.left = `${x}%`;
+                        vortex.style.top = `${y}%`;
+                    });
+                } else if (currentVisualizerType === 20) {
+                    // Onde circolari
+                    const ripples = visualizer.querySelectorAll('.visualizer-ripple');
+                    const time = Date.now() / 1000;
+                    ripples.forEach((ripple, i) => {
+                        const scale = 1 + i * 0.5 + Math.sin(time * 2) * 0.5;
+                        ripple.style.transform = `scale(${scale})`;
+                        ripple.style.opacity = 0.7 - i * 0.1;
+                    });
+                } else if (currentVisualizerType === 21) {
+                    // Fuochi d'artificio
+                    const fireworks = visualizer.querySelectorAll('.visualizer-firework');
+                    fireworks.forEach(firework => {
+                        let top = parseFloat(firework.style.top) || 0;
+                        top -= Math.random() * 2;
+                        
+                        if (top < 0) {
+                            top = 100;
+                            firework.style.left = `${Math.random() * 100}%`;
+                        }
+                        
+                        firework.style.top = `${top}%`;
+                        firework.style.opacity = 0.3 + (top / 100) * 0.7;
+                    });
+                } else if (currentVisualizerType === 22) {
+                    // Nebulosa
+                    const dots = visualizer.querySelectorAll('.visualizer-dot');
+                    dots.forEach(dot => {
+                        const pulse = 0.3 + Math.sin(Date.now() / 1000 + Math.random() * 10) * 0.3;
+                        dot.style.opacity = pulse;
+                    });
+                } else if (currentVisualizerType === 23) {
+                    // Scia
+                    const trails = visualizer.querySelectorAll('.visualizer-dot');
+                    trails.forEach(trail => {
+                        let left = parseFloat(trail.style.left) || 0;
+                        left += (Math.random() - 0.5) * 2;
+                        
+                        if (left < 0) left = 0;
+                        if (left > 100) left = 100;
+                        
+                        trail.style.left = `${left}%`;
+                        trail.style.opacity = 0.2 + Math.random() * 0.8;
+                    });
+                } else if (currentVisualizerType === 24) {
+                    // Cascata
+                    const waterfalls = visualizer.querySelectorAll('.visualizer-bar');
+                    waterfalls.forEach(waterfall => {
+                        let height = parseFloat(waterfall.style.height) || 5;
+                        height += (Math.random() - 0.5) * 10;
+                        
+                        if (height < 5) height = 5;
+                        if (height > 80) height = 80;
+                        
+                        waterfall.style.height = `${height}px`;
+                    });
+                }
+                
+                visualizerAnimationId = requestAnimationFrame(animate);
+            }
+            
+            visualizerContainer.style.display = 'block';
+            animate();
+        }
+
+        // Ferma il visualizzatore
+        function stopVisualizer() {
+            if (visualizerAnimationId) {
+                cancelAnimationFrame(visualizerAnimationId);
+                visualizerAnimationId = null;
+            }
+            visualizerContainer.style.display = 'none';
+        }
+
+        // Cambia tipo di visualizzatore
+        function changeVisualizerType() {
+            currentVisualizerType = (currentVisualizerType + 1) % visualizerTypes;
+            initVisualizer();
+            if (isPlaying) {
+                startVisualizer();
+            }
+        }
 
         // Imposta volume iniziale
         audio.volume = volumeSlider.value;
@@ -351,7 +1210,13 @@
 
                 // Aggiorna UI
                 updateStationCounter();
-                displayStations(newStations);
+                
+                if (!showingFavorites) {
+                    displayStations(newStations);
+                } else {
+                    // Se stiamo mostrando i preferiti, aggiorna la lista con i preferiti
+                    showFavorites();
+                }
                 
                 statusEl.textContent = `Caricate ${newStations.length} stazioni`;
                 
@@ -374,7 +1239,7 @@
             statusEl.textContent = 'Caricamento stazioni iniziali...';
             
             // Carica più batch iniziali per partire con un buon numero
-            const initialBatches = 5; // 5 batch × 200 = 1000 stazioni iniziali
+            const initialBatches = 5;
             let loaded = 0;
             
             for (let i = 0; i < initialBatches && loaded < TARGET_STATIONS; i++) {
@@ -419,22 +1284,173 @@
         // Funzione per visualizzare le stazioni
         function displayStations(stations) {
             stations.forEach(station => {
+                // Controlla se questa stazione è già nella lista
+                const existingItem = stationList.querySelector(`[data-uuid="${station.stationuuid}"]`);
+                if (existingItem) return;
+                
                 const stationItem = document.createElement('div');
                 stationItem.className = 'station-item';
+                stationItem.dataset.uuid = station.stationuuid;
+                
+                const isFavorite = favorites.includes(station.stationuuid);
                 
                 stationItem.innerHTML = `
-                    <div class="station-item-name">${station.name}</div>
-                    <div class="station-item-details">
-                        ${station.country || 'N/A'} • ${station.tags?.split(',')[0] || 'No tags'} • 
-                        ${station.bitrate || 'N/A'}kbps
+                    <div class="station-item-info">
+                        <div class="station-item-name">${station.name}</div>
+                        <div class="station-item-details">
+                            ${station.country || 'N/A'} • ${station.tags?.split(',')[0] || 'No tags'} • 
+                            ${station.bitrate || 'N/A'}kbps
+                        </div>
                     </div>
+                    <div class="station-item-favorite ${isFavorite ? 'active' : ''}">♥</div>
                 `;
                 
-                stationItem.addEventListener('click', () => {
-                    selectStation(station);
+                stationItem.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('station-item-favorite')) {
+                        selectStation(station);
+                    }
+                });
+                
+                const favoriteIcon = stationItem.querySelector('.station-item-favorite');
+                favoriteIcon.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleFavorite(station.stationuuid, station);
+                    favoriteIcon.classList.toggle('active');
+                    
+                    // Aggiorna il pulsante preferiti se questa è la stazione corrente
+                    if (currentStation && currentStation.stationuuid === station.stationuuid) {
+                        updateFavoriteButton();
+                    }
                 });
                 
                 stationList.appendChild(stationItem);
+            });
+        }
+
+        // Funzione per mostrare tutte le stazioni
+        function showAllStations() {
+            showingFavorites = false;
+            showAllBtn.classList.add('active');
+            showFavoritesBtn.classList.remove('active');
+            stationList.innerHTML = '';
+            displayStations(allStations);
+            statusEl.textContent = `Mostrando tutte le stazioni (${allStations.length})`;
+        }
+
+        // Funzione per mostrare solo i preferiti
+        function showFavorites() {
+            showingFavorites = true;
+            showAllBtn.classList.remove('active');
+            showFavoritesBtn.classList.add('active');
+            
+            const favoriteStations = allStations.filter(station => 
+                favorites.includes(station.stationuuid)
+            );
+            
+            stationList.innerHTML = '';
+            displayStations(favoriteStations);
+            statusEl.textContent = `Mostrando ${favoriteStations.length} stazioni preferite`;
+        }
+
+        // Funzione per gestire i preferiti
+        function toggleFavorite(stationUuid, station) {
+            const index = favorites.indexOf(stationUuid);
+            
+            if (index === -1) {
+                // Aggiungi ai preferiti
+                favorites.push(stationUuid);
+                statusEl.textContent = 'Aggiunto ai preferiti';
+                
+                // Se stiamo visualizzando i preferiti, aggiungi la stazione alla lista
+                if (showingFavorites && station) {
+                    const stationItem = document.createElement('div');
+                    stationItem.className = 'station-item';
+                    stationItem.dataset.uuid = station.stationuuid;
+                    
+                    stationItem.innerHTML = `
+                        <div class="station-item-info">
+                            <div class="station-item-name">${station.name}</div>
+                            <div class="station-item-details">
+                                ${station.country || 'N/A'} • ${station.tags?.split(',')[0] || 'No tags'} • 
+                                ${station.bitrate || 'N/A'}kbps
+                            </div>
+                        </div>
+                        <div class="station-item-favorite active">♥</div>
+                    `;
+                    
+                    stationItem.addEventListener('click', (e) => {
+                        if (!e.target.classList.contains('station-item-favorite')) {
+                            selectStation(station);
+                        }
+                    });
+                    
+                    const favoriteIcon = stationItem.querySelector('.station-item-favorite');
+                    favoriteIcon.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        toggleFavorite(station.stationuuid, station);
+                        favoriteIcon.classList.toggle('active');
+                        
+                        // Aggiorna il pulsante preferiti se questa è la stazione corrente
+                        if (currentStation && currentStation.stationuuid === station.stationuuid) {
+                            updateFavoriteButton();
+                        }
+                    });
+                    
+                    stationList.appendChild(stationItem);
+                    
+                    // Aggiorna il contatore
+                    const favoriteStations = allStations.filter(station => 
+                        favorites.includes(station.stationuuid)
+                    );
+                    statusEl.textContent = `Mostrando ${favoriteStations.length} stazioni preferite`;
+                }
+            } else {
+                // Rimuovi dai preferiti
+                favorites.splice(index, 1);
+                statusEl.textContent = 'Rimosso dai preferiti';
+                
+                // Se stiamo visualizzando i preferiti, rimuovi l'elemento dalla lista
+                if (showingFavorites) {
+                    const stationItem = document.querySelector(`.station-item[data-uuid="${stationUuid}"]`);
+                    if (stationItem) {
+                        stationItem.remove();
+                        // Aggiorna il contatore
+                        const favoriteStations = allStations.filter(station => 
+                            favorites.includes(station.stationuuid)
+                        );
+                        statusEl.textContent = `Mostrando ${favoriteStations.length} stazioni preferite`;
+                    }
+                }
+            }
+            
+            // Salva i preferiti nel localStorage
+            localStorage.setItem('radioFavorites', JSON.stringify(favorites));
+            
+            // Aggiorna il pulsante preferiti
+            updateFavoriteButton();
+        }
+
+        // Funzione per aggiornare il pulsante preferiti
+        function updateFavoriteButton() {
+            if (currentStation) {
+                const isFavorite = favorites.includes(currentStation.stationuuid);
+                favoriteBtn.classList.toggle('active', isFavorite);
+            } else {
+                favoriteBtn.classList.remove('active');
+            }
+        }
+
+        // Funzione per aggiornare le icone dei preferiti
+        function updateFavoriteIcons() {
+            document.querySelectorAll('.station-item').forEach(item => {
+                const uuid = item.dataset.uuid;
+                const favoriteIcon = item.querySelector('.station-item-favorite');
+                
+                if (favorites.includes(uuid)) {
+                    favoriteIcon.classList.add('active');
+                } else {
+                    favoriteIcon.classList.remove('active');
+                }
             });
         }
 
@@ -448,6 +1464,10 @@
             audio.pause();
             isPlaying = false;
             playPauseBtn.textContent = '▶';
+            stopVisualizer();
+            
+            // Aggiorna il pulsante preferiti
+            updateFavoriteButton();
             
             playStation();
         }
@@ -463,6 +1483,7 @@
                 isPlaying = true;
                 playPauseBtn.textContent = '⏸';
                 statusEl.textContent = 'In riproduzione';
+                startVisualizer();
                 
                 // Registra il click per le statistiche
                 recordStationClick(currentStation.stationuuid);
@@ -471,6 +1492,7 @@
                 statusEl.textContent = 'Errore: stream non supportato';
                 isPlaying = false;
                 playPauseBtn.textContent = '▶';
+                stopVisualizer();
             });
         }
 
@@ -496,7 +1518,7 @@
                     currentOffset = 0;
                     allStations = [];
                     stationList.innerHTML = '';
-                    await loadStationsBatch(0, 200, query); // Carica più risultati per la ricerca
+                    await loadStationsBatch(0, 200, query);
                 } else if (query.length === 0) {
                     // Ritorna al caricamento normale
                     currentSearchQuery = '';
@@ -520,8 +1542,16 @@
                 isPlaying = false;
                 playPauseBtn.textContent = '▶';
                 statusEl.textContent = 'In pausa';
+                stopVisualizer();
             } else {
                 playStation();
+            }
+        });
+
+        favoriteBtn.addEventListener('click', () => {
+            if (currentStation) {
+                toggleFavorite(currentStation.stationuuid, currentStation);
+                updateFavoriteIcons();
             }
         });
 
@@ -535,15 +1565,24 @@
             handleSearch(e.target.value.trim());
         });
 
+        showAllBtn.addEventListener('click', showAllStations);
+        showFavoritesBtn.addEventListener('click', showFavorites);
+        
+        // Click sul visualizzatore per cambiare tipo
+        visualizerContainer.addEventListener('click', changeVisualizerType);
+
         // Gestione errori audio
         audio.addEventListener('error', (e) => {
             console.error('Errore audio:', e);
             statusEl.textContent = 'Errore: stream non supportato';
             isPlaying = false;
             playPauseBtn.textContent = '▶';
+            stopVisualizer();
         });
 
         // Inizializzazione
+        initVisualizer();
+        showAllBtn.classList.add('active');
         loadInitialStations();
     </script>
 </body>
