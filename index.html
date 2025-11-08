@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Player - 10.000 Stazioni</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0f0f0f;
+            color: white;
+            padding: 20px;
+        }
+
+        .radio-player {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+        }
+
+        .station-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .station-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .station-details {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: #ff2a6d;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #ff1a5d;
+            transform: scale(1.05);
+        }
+
+        .control-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            background: #333;
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #ff2a6d;
+            cursor: pointer;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background: #252525;
+            color: white;
+            font-size: 1em;
+            outline: none;
+            margin-bottom: 12px;
+        }
+
+        .search-box:focus {
+            border-color: #ff2a6d;
+        }
+
+        .load-more-btn {
+            width: 100%;
+            padding: 12px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            background: #444;
+        }
+
+        .load-more-btn:disabled {
+            background: #222;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .station-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 10px;
+            background: #252525;
+            margin-bottom: 10px;
+        }
+
+        .station-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .station-item:hover {
+            background: #333;
+        }
+
+        .station-item:last-child {
+            border-bottom: none;
+        }
+
+        .station-item-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .station-item-details {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        .status {
+            text-align: center;
+            margin: 12px 0;
+            font-size: 0.9em;
+            color: #ff2a6d;
+            min-height: 20px;
+        }
+
+        .counter {
+            text-align: center;
+            font-size: 0.8em;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #ff2a6d;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .station-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .station-list::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        .station-list::-webkit-scrollbar-thumb {
+            background: #ff2a6d;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="radio-player">
+        <div class="station-info">
+            <div class="station-name">Seleziona una stazione</div>
+            <div class="station-details">Caricamento in corso...</div>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn" id="playPause" disabled>▶</button>
+        </div>
+
+        <div class="volume-container">
+            <span>🔊</span>
+            <input type="range" class="volume-slider" id="volume" min="0" max="1" step="0.1" value="0.5">
+        </div>
+
+        <div class="counter">
+            Caricate: <span id="stationCount">0</span> / 10000 stazioni
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-box" id="searchInput" placeholder="Cerca stazioni radio...">
+            <div class="station-list" id="stationList"></div>
+            <button class="load-more-btn" id="loadMore" disabled>Carica più stazioni...</button>
+        </div>
+        
+        <div class="status" id="status">Preparazione...</div>
+    </div>
+
+    <script>
+        // Configurazione
+        const TARGET_STATIONS = 10000;
+        const BATCH_SIZE = 100; // Dimensione di ogni richiesta
+        const MAX_REQUESTS = TARGET_STATIONS / BATCH_SIZE; // 100 richieste
+
+        // Elementi DOM
+        const audio = new Audio();
+        const playPauseBtn = document.getElementById('playPause');
+        const volumeSlider = document.getElementById('volume');
+        const searchInput = document.getElementById('searchInput');
+        const stationList = document.getElementById('stationList');
+        const loadMoreBtn = document.getElementById('loadMore');
+        const stationName = document.querySelector('.station-name');
+        const stationDetails = document.querySelector('.station-details');
+        const statusEl = document.getElementById('status');
+        const stationCountEl = document.getElementById('stationCount');
+        const progressBar = document.getElementById('progressBar');
+
+        // Variabili globali
+        let currentStation = null;
+        let isPlaying = false;
+        let allStations = [];
+        let loadedCount = 0;
+        let currentOffset = 0;
+        let isLoading = false;
+        let currentSearchQuery = '';
+
+        // Imposta volume iniziale
+        audio.volume = volumeSlider.value;
+
+        // Funzione per caricare stazioni con paginazione
+        async function loadStationsBatch(offset = 0, limit = BATCH_SIZE, query = '') {
+            if (isLoading) return [];
+            
+            isLoading = true;
+            statusEl.textContent = `Caricamento stazioni ${offset + 1}-${offset + limit}...`;
+            loadMoreBtn.disabled = true;
+            loadMoreBtn.textContent = 'Caricamento...';
+
+            try {
+                const baseUrl = 'https://de1.api.radio-browser.info/json/stations/search';
+                const params = new URLSearchParams({
+                    limit: limit.toString(),
+                    offset: offset.toString(),
+                    hidebroken: 'true'
+                });
+
+                if (query) {
+                    params.append('name', query);
+                }
+
+                const response = await fetch(`${baseUrl}?${params}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Errore HTTP: ${response.status}`);
+                }
+                
+                const stations = await response.json();
+                
+                // Filtra stazioni duplicate per UUID
+                const newStations = stations.filter(newStation => 
+                    !allStations.some(existingStation => 
+                        existingStation.stationuuid === newStation.stationuuid
+                    )
+                );
+
+                allStations = [...allStations, ...newStations];
+                loadedCount = allStations.length;
+
+                // Aggiorna UI
+                updateStationCounter();
+                displayStations(newStations);
+                
+                statusEl.textContent = `Caricate ${newStations.length} stazioni`;
+                
+                return newStations;
+
+            } catch (error) {
+                console.error('Errore nel caricamento:', error);
+                statusEl.textContent = `Errore: ${error.message}`;
+                return [];
+            } finally {
+                isLoading = false;
+                loadMoreBtn.disabled = false;
+                loadMoreBtn.textContent = 'Carica più stazioni...';
+                playPauseBtn.disabled = allStations.length === 0;
+            }
+        }
+
+        // Funzione per caricamento iniziale
+        async function loadInitialStations() {
+            statusEl.textContent = 'Caricamento stazioni iniziali...';
+            
+            // Carica più batch iniziali per partire con un buon numero
+            const initialBatches = 5; // 5 batch × 100 = 500 stazioni iniziali
+            let loaded = 0;
+            
+            for (let i = 0; i < initialBatches && loaded < TARGET_STATIONS; i++) {
+                const newStations = await loadStationsBatch(currentOffset, BATCH_SIZE);
+                currentOffset += BATCH_SIZE;
+                loaded += newStations.length;
+                
+                // Piccola pausa tra le richieste per non sovraccaricare il server
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            statusEl.textContent = `Caricate ${loaded} stazioni iniziali. Usa la ricerca o carica più stazioni.`;
+        }
+
+        // Funzione per caricare più stazioni
+        async function loadMoreStations() {
+            if (isLoading || loadedCount >= TARGET_STATIONS) return;
+            
+            const newStations = await loadStationsBatch(currentOffset, BATCH_SIZE, currentSearchQuery);
+            currentOffset += BATCH_SIZE;
+            
+            if (newStations.length === 0) {
+                statusEl.textContent = 'Nessuna altra stazione trovata';
+                loadMoreBtn.disabled = true;
+                loadMoreBtn.textContent = 'Tutte le stazioni caricate';
+            }
+        }
+
+        // Funzione per aggiornare il contatore
+        function updateStationCounter() {
+            stationCountEl.textContent = loadedCount;
+            const progress = (loadedCount / TARGET_STATIONS) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            if (loadedCount >= TARGET_STATIONS) {
+                loadMoreBtn.disabled = true;
+                loadMoreBtn.textContent = 'Raggiunte 10000 stazioni!';
+                statusEl.textContent = 'Complimenti! Hai raggiunto 10000 stazioni!';
+            }
+        }
+
+        // Funzione per visualizzare le stazioni
+        function displayStations(stations) {
+            stations.forEach(station => {
+                const stationItem = document.createElement('div');
+                stationItem.className = 'station-item';
+                
+                stationItem.innerHTML = `
+                    <div class="station-item-name">${station.name}</div>
+                    <div class="station-item-details">
+                        ${station.country || 'N/A'} • ${station.tags?.split(',')[0] || 'No tags'} • 
+                        ${station.bitrate || 'N/A'}kbps
+                    </div>
+                `;
+                
+                stationItem.addEventListener('click', () => {
+                    selectStation(station);
+                });
+                
+                stationList.appendChild(stationItem);
+            });
+        }
+
+        // Funzione per selezionare una stazione
+        function selectStation(station) {
+            currentStation = station;
+            stationName.textContent = station.name;
+            stationDetails.textContent = `${station.country || 'N/A'} • ${station.tags?.split(',')[0] || 'No tags'}`;
+            statusEl.textContent = 'Preparazione...';
+            
+            audio.pause();
+            isPlaying = false;
+            playPauseBtn.textContent = '▶';
+            
+            playStation();
+        }
+
+        // Funzione per riprodurre la stazione
+        function playStation() {
+            if (!currentStation) return;
+            
+            const streamUrl = currentStation.url_resolved || currentStation.url;
+            audio.src = streamUrl;
+            
+            audio.play().then(() => {
+                isPlaying = true;
+                playPauseBtn.textContent = '⏸';
+                statusEl.textContent = 'In riproduzione';
+                
+                // Registra il click per le statistiche
+                recordStationClick(currentStation.stationuuid);
+            }).catch(error => {
+                console.error('Errore nella riproduzione:', error);
+                statusEl.textContent = 'Errore: stream non supportato';
+                isPlaying = false;
+                playPauseBtn.textContent = '▶';
+            });
+        }
+
+        // Funzione per registrare i click (per le statistiche Radio Browser)
+        async function recordStationClick(stationUuid) {
+            try {
+                await fetch(`https://de1.api.radio-browser.info/json/url/${stationUuid}`, {
+                    method: 'POST'
+                });
+            } catch (error) {
+                console.log('Statistica non registrata:', error);
+            }
+        }
+
+        // Ricerca stazioni
+        let searchTimeout;
+        function handleSearch(query) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(async () => {
+                if (query.length >= 2) {
+                    // Ricerca specifica
+                    currentSearchQuery = query;
+                    currentOffset = 0;
+                    allStations = [];
+                    stationList.innerHTML = '';
+                    await loadStationsBatch(0, 200, query); // Carica più risultati per la ricerca
+                } else if (query.length === 0) {
+                    // Ritorna al caricamento normale
+                    currentSearchQuery = '';
+                    currentOffset = 0;
+                    allStations = [];
+                    stationList.innerHTML = '';
+                    await loadInitialStations();
+                }
+            }, 800);
+        }
+
+        // Event listeners
+        playPauseBtn.addEventListener('click', () => {
+            if (!currentStation && allStations.length > 0) {
+                selectStation(allStations[0]);
+                return;
+            }
+            
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+                playPauseBtn.textContent = '▶';
+                statusEl.textContent = 'In pausa';
+            } else {
+                playStation();
+            }
+        });
+
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
+        });
+
+        loadMoreBtn.addEventListener('click', loadMoreStations);
+
+        searchInput.addEventListener('input', (e) => {
+            handleSearch(e.target.value.trim());
+        });
+
+        // Gestione errori audio
+        audio.addEventListener('error', (e) => {
+            console.error('Errore audio:', e);
+            statusEl.textContent = 'Errore: stream non supportato';
+            isPlaying = false;
+            playPauseBtn.textContent = '▶';
+        });
+
+        // Inizializzazione
+        loadInitialStations();
+    </script>
+</body>
+</html>
