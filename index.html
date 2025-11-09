@@ -214,14 +214,19 @@
 }
 
 .load-more-btn {
-    padding: 12px 20px;
+    padding: 8px 12px;
     background: #333;
     color: white;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     white-space: nowrap;
-    /* Add other styles you had for the button */
+    font-size: 1.2em;
+    width: 50px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
         .load-more-btn:hover {
@@ -558,7 +563,7 @@
         <div class="search-container">
             <div class="search-header">
                 <input type="text" class="search-box" id="searchInput" placeholder="🔍 Cerca stazioni radio...">
-                 <button class="load-more-btn" id="loadMore" disabled>Carica più stazioni</button>
+                 <button class="load-more-btn" id="loadMore" disabled>🔍+</button>
             </div>
             <div class="station-list" id="stationList"></div>
         </div>
@@ -1188,7 +1193,7 @@
             isLoading = true;
             statusEl.textContent = `Caricamento stazioni ${offset + 1}-${offset + limit}...`;
             loadMoreBtn.disabled = true;
-            loadMoreBtn.textContent = 'Caricamento...';
+            loadMoreBtn.textContent = '🔍+';
 
             try {
                 const baseUrl = 'https://de1.api.radio-browser.info/json/stations/search';
@@ -1235,7 +1240,7 @@
             } finally {
                 isLoading = false;
                 loadMoreBtn.disabled = false;
-                loadMoreBtn.textContent = 'Carica più stazioni';
+                loadMoreBtn.textContent = '🔍+';
             }
         }
 
@@ -1269,7 +1274,7 @@
             if (newStations.length === 0) {
                 statusEl.textContent = 'Nessuna altra stazione trovata';
                 loadMoreBtn.disabled = true;
-                loadMoreBtn.textContent = 'Tutte le stazioni caricate';
+                loadMoreBtn.textContent = '🔍+';
             }
         }
 
@@ -1281,7 +1286,7 @@
             
             if (loadedCount >= TARGET_STATIONS) {
                 loadMoreBtn.disabled = true;
-                loadMoreBtn.textContent = 'Raggiunte 10000 stazioni!';
+                loadMoreBtn.textContent = '🔍+';
                 statusEl.textContent = 'Complimenti! Hai raggiunto 10000 stazioni!';
             }
         }
