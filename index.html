@@ -92,30 +92,6 @@
             transform: none;
         }
 
-        .favorite-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: #333;
-            color: #ff2a6d;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-        }
-
-        .favorite-btn:hover {
-            background: #444;
-        }
-
-        .favorite-btn.active {
-            background: #ff2a6d;
-            color: white;
-        }
-
         .volume-container {
             display: flex;
             align-items: center;
@@ -232,22 +208,6 @@
             color: #888;
         }
 
-        .station-item-favorite {
-            color: #ff2a6d;
-            font-size: 1.2em;
-            margin-left: 10px;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-
-        .station-item:hover .station-item-favorite {
-            opacity: 1;
-        }
-
-        .station-item-favorite.active {
-            opacity: 1;
-        }
-
         .load-more-btn {
             width: 100%;
             padding: 12px;
@@ -277,32 +237,6 @@
             color: #ff2a6d;
             min-height: 20px;
             flex-shrink: 0;
-        }
-
-        .favorites-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-shrink: 0;
-        }
-
-        .favorites-btn {
-            flex: 1;
-            padding: 10px;
-            background: #333;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .favorites-btn:hover {
-            background: #444;
-        }
-
-        .favorites-btn.active {
-            background: #ff2a6d;
         }
 
         .visualizer-container {
@@ -564,7 +498,6 @@
         
         <div class="controls">
             <button class="control-btn" id="playPause" disabled>▶</button>
-            <button class="favorite-btn" id="favoriteBtn">♥</button>
         </div>
 
         <div class="volume-container">
@@ -574,11 +507,6 @@
 
         <div class="visualizer-container" id="visualizerContainer">
             <div class="visualizer" id="visualizer"></div>
-        </div>
-
-        <div class="favorites-controls">
-            <button class="favorites-btn" id="showAllBtn">Tutte le stazioni</button>
-            <button class="favorites-btn" id="showFavoritesBtn">Preferiti</button>
         </div>
 
         <div class="counter">
@@ -606,7 +534,6 @@
         // Elementi DOM
         const audio = new Audio();
         const playPauseBtn = document.getElementById('playPause');
-        const favoriteBtn = document.getElementById('favoriteBtn');
         const volumeSlider = document.getElementById('volume');
         const searchInput = document.getElementById('searchInput');
         const stationList = document.getElementById('stationList');
@@ -616,8 +543,6 @@
         const statusEl = document.getElementById('status');
         const stationCountEl = document.getElementById('stationCount');
         const progressBar = document.getElementById('progressBar');
-        const showAllBtn = document.getElementById('showAllBtn');
-        const showFavoritesBtn = document.getElementById('showFavoritesBtn');
         const visualizerContainer = document.getElementById('visualizerContainer');
         const visualizer = document.getElementById('visualizer');
 
@@ -629,8 +554,6 @@
         let currentOffset = 0;
         let isLoading = false;
         let currentSearchQuery = '';
-        let favorites = JSON.parse(localStorage.getItem('radioFavorites')) || [];
-        let showingFavorites = false;
         let visualizerAnimationId = null;
         let currentVisualizerType = 0;
         const visualizerTypes = 25;
@@ -1210,13 +1133,7 @@
 
                 // Aggiorna UI
                 updateStationCounter();
-                
-                if (!showingFavorites) {
-                    displayStations(newStations);
-                } else {
-                    // Se stiamo mostrando i preferiti, aggiorna la lista con i preferiti
-                    showFavorites();
-                }
+                displayStations(newStations);
                 
                 statusEl.textContent = `Caricate ${newStations.length} stazioni`;
                 
@@ -1292,8 +1209,6 @@
                 stationItem.className = 'station-item';
                 stationItem.dataset.uuid = station.stationuuid;
                 
-                const isFavorite = favorites.includes(station.stationuuid);
-                
                 stationItem.innerHTML = `
                     <div class="station-item-info">
                         <div class="station-item-name">${station.name}</div>
@@ -1302,155 +1217,13 @@
                             ${station.bitrate || 'N/A'}kbps
                         </div>
                     </div>
-                    <div class="station-item-favorite ${isFavorite ? 'active' : ''}">♥</div>
                 `;
                 
-                stationItem.addEventListener('click', (e) => {
-                    if (!e.target.classList.contains('station-item-favorite')) {
-                        selectStation(station);
-                    }
-                });
-                
-                const favoriteIcon = stationItem.querySelector('.station-item-favorite');
-                favoriteIcon.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleFavorite(station.stationuuid, station);
-                    favoriteIcon.classList.toggle('active');
-                    
-                    // Aggiorna il pulsante preferiti se questa è la stazione corrente
-                    if (currentStation && currentStation.stationuuid === station.stationuuid) {
-                        updateFavoriteButton();
-                    }
+                stationItem.addEventListener('click', () => {
+                    selectStation(station);
                 });
                 
                 stationList.appendChild(stationItem);
-            });
-        }
-
-        // Funzione per mostrare tutte le stazioni
-        function showAllStations() {
-            showingFavorites = false;
-            showAllBtn.classList.add('active');
-            showFavoritesBtn.classList.remove('active');
-            stationList.innerHTML = '';
-            displayStations(allStations);
-            statusEl.textContent = `Mostrando tutte le stazioni (${allStations.length})`;
-        }
-
-        // Funzione per mostrare solo i preferiti
-        function showFavorites() {
-            showingFavorites = true;
-            showAllBtn.classList.remove('active');
-            showFavoritesBtn.classList.add('active');
-            
-            const favoriteStations = allStations.filter(station => 
-                favorites.includes(station.stationuuid)
-            );
-            
-            stationList.innerHTML = '';
-            displayStations(favoriteStations);
-            statusEl.textContent = `Mostrando ${favoriteStations.length} stazioni preferite`;
-        }
-
-        // Funzione per gestire i preferiti
-        function toggleFavorite(stationUuid, station) {
-            const index = favorites.indexOf(stationUuid);
-            
-            if (index === -1) {
-                // Aggiungi ai preferiti
-                favorites.push(stationUuid);
-                statusEl.textContent = 'Aggiunto ai preferiti';
-                
-                // Se stiamo visualizzando i preferiti, aggiungi la stazione alla lista
-                if (showingFavorites && station) {
-                    const stationItem = document.createElement('div');
-                    stationItem.className = 'station-item';
-                    stationItem.dataset.uuid = station.stationuuid;
-                    
-                    stationItem.innerHTML = `
-                        <div class="station-item-info">
-                            <div class="station-item-name">${station.name}</div>
-                            <div class="station-item-details">
-                                ${station.country || 'N/A'} • ${station.tags?.split(',')[0] || 'No tags'} • 
-                                ${station.bitrate || 'N/A'}kbps
-                            </div>
-                        </div>
-                        <div class="station-item-favorite active">♥</div>
-                    `;
-                    
-                    stationItem.addEventListener('click', (e) => {
-                        if (!e.target.classList.contains('station-item-favorite')) {
-                            selectStation(station);
-                        }
-                    });
-                    
-                    const favoriteIcon = stationItem.querySelector('.station-item-favorite');
-                    favoriteIcon.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        toggleFavorite(station.stationuuid, station);
-                        favoriteIcon.classList.toggle('active');
-                        
-                        // Aggiorna il pulsante preferiti se questa è la stazione corrente
-                        if (currentStation && currentStation.stationuuid === station.stationuuid) {
-                            updateFavoriteButton();
-                        }
-                    });
-                    
-                    stationList.appendChild(stationItem);
-                    
-                    // Aggiorna il contatore
-                    const favoriteStations = allStations.filter(station => 
-                        favorites.includes(station.stationuuid)
-                    );
-                    statusEl.textContent = `Mostrando ${favoriteStations.length} stazioni preferite`;
-                }
-            } else {
-                // Rimuovi dai preferiti
-                favorites.splice(index, 1);
-                statusEl.textContent = 'Rimosso dai preferiti';
-                
-                // Se stiamo visualizzando i preferiti, rimuovi l'elemento dalla lista
-                if (showingFavorites) {
-                    const stationItem = document.querySelector(`.station-item[data-uuid="${stationUuid}"]`);
-                    if (stationItem) {
-                        stationItem.remove();
-                        // Aggiorna il contatore
-                        const favoriteStations = allStations.filter(station => 
-                            favorites.includes(station.stationuuid)
-                        );
-                        statusEl.textContent = `Mostrando ${favoriteStations.length} stazioni preferite`;
-                    }
-                }
-            }
-            
-            // Salva i preferiti nel localStorage
-            localStorage.setItem('radioFavorites', JSON.stringify(favorites));
-            
-            // Aggiorna il pulsante preferiti
-            updateFavoriteButton();
-        }
-
-        // Funzione per aggiornare il pulsante preferiti
-        function updateFavoriteButton() {
-            if (currentStation) {
-                const isFavorite = favorites.includes(currentStation.stationuuid);
-                favoriteBtn.classList.toggle('active', isFavorite);
-            } else {
-                favoriteBtn.classList.remove('active');
-            }
-        }
-
-        // Funzione per aggiornare le icone dei preferiti
-        function updateFavoriteIcons() {
-            document.querySelectorAll('.station-item').forEach(item => {
-                const uuid = item.dataset.uuid;
-                const favoriteIcon = item.querySelector('.station-item-favorite');
-                
-                if (favorites.includes(uuid)) {
-                    favoriteIcon.classList.add('active');
-                } else {
-                    favoriteIcon.classList.remove('active');
-                }
             });
         }
 
@@ -1465,9 +1238,6 @@
             isPlaying = false;
             playPauseBtn.textContent = '▶';
             stopVisualizer();
-            
-            // Aggiorna il pulsante preferiti
-            updateFavoriteButton();
             
             playStation();
         }
@@ -1548,13 +1318,6 @@
             }
         });
 
-        favoriteBtn.addEventListener('click', () => {
-            if (currentStation) {
-                toggleFavorite(currentStation.stationuuid, currentStation);
-                updateFavoriteIcons();
-            }
-        });
-
         volumeSlider.addEventListener('input', (e) => {
             audio.volume = e.target.value;
         });
@@ -1564,9 +1327,6 @@
         searchInput.addEventListener('input', (e) => {
             handleSearch(e.target.value.trim());
         });
-
-        showAllBtn.addEventListener('click', showAllStations);
-        showFavoritesBtn.addEventListener('click', showFavorites);
         
         // Click sul visualizzatore per cambiare tipo
         visualizerContainer.addEventListener('click', changeVisualizerType);
@@ -1582,7 +1342,6 @@
 
         // Inizializzazione
         initVisualizer();
-        showAllBtn.classList.add('active');
         loadInitialStations();
     </script>
 </body>
